@@ -9,5 +9,8 @@ import { Component, ChangeDetectionStrategy } from "@angular/core";
 })
 export class LaunchListComponent {
   constructor(private readonly launchFacade: LaunchFacadeService) {}
-  pastLaunches$ = this.launchFacade.pastLaunchListStoreCache();
+  launchLimit = 30;
+  pastLaunches$ = this.launchFacade.pastLaunchListStoreCache(this.launchLimit);
+  launchesLoading$ = this.launchFacade.launchListLoading$;
+  launchesLoaded$ = this.launchFacade.launchListLoaded$;
 }

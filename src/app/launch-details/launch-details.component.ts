@@ -1,7 +1,12 @@
-import { Component, ChangeDetectionStrategy } from "@angular/core";
+import {
+  Component,
+  ChangeDetectionStrategy,
+  ViewChild,
+  ElementRef
+} from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { map, switchMap } from "rxjs/operators";
-import { LaunchDetailsGQL } from "../services/spacexGraphql.service";
+import { LaunchFacadeService } from "../services/launch-facade.service";
 
 @Component({
   selector: "app-launch-details",
@@ -12,12 +17,30 @@ import { LaunchDetailsGQL } from "../services/spacexGraphql.service";
 export class LaunchDetailsComponent {
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly launchDetailsService: LaunchDetailsGQL
+    private readonly launchFacade: LaunchFacadeService
   ) {}
+
+  @ViewChild("thumbs", { static: false }) thumbs: ElementRef;
 
   launchDetails$ = this.route.paramMap.pipe(
     map(params => params.get("id") as string),
-    switchMap(id => this.launchDetailsService.fetch({ id })),
-    map(res => res.data.launch)
+    switchMap(id => this.launchFacade.getLaunchDetailStoreCache(id))
   );
+
+  launchDetailsLoading$ = this.launchFacade.launchDetailLoading$;
+  launchDetailsLoaded$ = this.launchFacade.launchDetailLoaded$;
+
+  sliderSrc;
+
+  activateImage(src) {
+    this.sliderSrc = src;
+  }
+
+  scrollLeft() {
+    this.thumbs.nativeElement.scrollLeft -= 100;
+  }
+
+  scrollRight() {
+    this.thumbs.nativeElement.scrollLeft += 100;
+  }
 }

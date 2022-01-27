@@ -1,16 +1,28 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientModule } from "@angular/common/http";
+import { StoreModule } from "@ngrx/store";
+import { RouterModule } from "@angular/router";
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { MatCardModule, MatProgressSpinnerModule } from "@angular/material";
 
-import { LaunchDetailsComponent } from './launch-details.component';
+import { LaunchDetailsComponent } from "./launch-details.component";
+import { GraphQLModule } from "../graphql.module";
 
-describe('LaunchDetailsComponent', () => {
+describe("LaunchDetailsComponent", () => {
   let component: LaunchDetailsComponent;
   let fixture: ComponentFixture<LaunchDetailsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LaunchDetailsComponent ]
-    })
-    .compileComponents();
+      declarations: [LaunchDetailsComponent],
+      imports: [
+        MatCardModule,
+        MatProgressSpinnerModule,
+        RouterModule.forRoot([]),
+        StoreModule.forRoot([]),
+        GraphQLModule,
+        HttpClientModule
+      ]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +31,7 @@ describe('LaunchDetailsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

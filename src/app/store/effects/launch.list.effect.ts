@@ -19,8 +19,8 @@ export class LaunchEffects {
   loadLaunchList$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loadLaunchList),
-      switchMap(() =>
-        this.pastLaunchesService.fetch({ limit: 30 }).pipe(
+      switchMap(action =>
+        this.pastLaunchesService.fetch({ limit: action.payload }).pipe(
           map((response: any) =>
             loadLaunchListSuccess({
               payload: response.data.launchesPast as any

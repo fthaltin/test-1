@@ -1,7 +1,7 @@
-import { LaunchListState } from "../reducers";
+import { LaunchState } from "../reducers";
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 
-export const getLaunchListState = createFeatureSelector<LaunchListState>(
+export const getLaunchListState = createFeatureSelector<LaunchState>(
   "launchList"
 );
 

@@ -1,6 +1,9 @@
 import { createAction, props } from "@ngrx/store";
 
-export const loadLaunchList = createAction("[Launch] Load Launch List");
+export const loadLaunchList = createAction(
+  "[Launch] Load Launch List",
+  props<{ payload: number }>()
+);
 
 export const loadLaunchListSuccess = createAction(
   "[Launch] Load Launch List Success",

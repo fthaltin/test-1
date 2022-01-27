@@ -1,29 +1,77 @@
 <ng-container *ngIf="launchDetails$ | async as launchDetails">
-  <section style="padding-top: 20px;">
-    <mat-card style="width: 400px; margin: auto;">
-      <mat-card-header>
-        <mat-card-title>{{ launchDetails.mission_name }}</mat-card-title>
-      </mat-card-header>
-      <img
-        height="256"
-        width="256"
-        mat-card-image
-        [src]="launchDetails.links.mission_patch"
-        alt="Mission patch of {{ launchDetails.mission_name }}"
-      />
-      <mat-card-content>
-        <p>{{ launchDetails.details }}</p>
-      </mat-card-content>
-    </mat-card>
-  </section>
-  <section class="photo-grid">
-    <img
-      *ngFor="let pic of launchDetails.links.flickr_images"
-      [src]="pic"
-      alt="Picture of {{ launchDetails.mission_name }}"
-      height="300"
-      width="300"
-      loading="lazy"
-    />
-  </section>
+  <ng-container *ngIf="!(launchDetailsLoading$ | async); else loading">
+    <ng-container *ngIf="launchDetailsLoaded$ | async">
+      <main class="container">
+        <section>
+          <a [routerLink]="['/']">
+            <h1 class="launch-name">
+              <span><i class="material-icons">arrow_back_ios</i></span>
+              {{ launchDetails.mission_name }}
+            </h1>
+          </a>
+        </section>
+        <section class="col-2">
+          <section class="detail-info">
+            <mat-card>
+              <img
+                height="400"
+                mat-card-image
+                [src]="launchDetails.links.mission_patch"
+                alt="Mission patch of {{ launchDetails.mission_name }}"
+              />
+              <mat-card-content>
+                <p>{{ launchDetails.details }}</p>
+              </mat-card-content>
+            </mat-card>
+          </section>
+          <section class="slider">
+            <section class="slider-preview">
+              <img
+                [src]="
+                  sliderSrc ? sliderSrc : launchDetails.links.flickr_images[0]
+                "
+                alt="Picture of {{ launchDetails.mission_name }}"
+                height="500"
+                width="500"
+                loading="lazy"
+              />
+            </section>
+            <section class="slider-actions">
+              <span class="thumb-arrow thumb-arrow-left" (click)="scrollLeft()"
+                ><i class="material-icons">arrow_back_ios</i></span
+              >
+              <section class="thumbs" #thumbs>
+                <img
+                  *ngFor="
+                    let pic of launchDetails.links.flickr_images;
+                    let i = index
+                  "
+                  [src]="pic"
+                  alt="Picture of {{ launchDetails.mission_name }}"
+                  height="100"
+                  width="100"
+                  loading="lazy"
+                  (click)="activateImage(pic)"
+                  class="thumb-image"
+                  [ngClass]="{
+                    'active-thumb-image':
+                      pic == sliderSrc || (!sliderSrc && i == 0)
+                  }"
+                />
+              </section>
+              <span
+                class="thumb-arrow thumb-arrow-right"
+                (click)="scrollRight()"
+                ><i class="material-icons">arrow_forward_ios</i>
+              </span>
+            </section>
+          </section>
+        </section>
+      </main>
+    </ng-container>
+  </ng-container>
 </ng-container>
+
+<ng-template #loading>
+  <mat-spinner></mat-spinner>
+</ng-template>
